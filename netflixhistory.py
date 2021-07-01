@@ -71,7 +71,7 @@ for show in showDates:
 
 # make the stacked bar chart
 bar_chart = pygal.StackedBar()
-bar_chart.title = "Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
+bar_chart.title = "2014-2021 Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
 bar_chart.x_labels = map(str, range(2014, 2022))
 for show in shows:
     bar_chart.add(show, shows[show])
@@ -82,12 +82,11 @@ sorted_shows = collections.defaultdict(list)
 for show in shows:
     sorted_shows[show] = sum(shows[show])
 sorted_shows = dict(sorted(sorted_shows.items(), key=lambda item: item[1], reverse=True))
-print(sorted_shows)
-
+# print(sorted_shows)
 
 # make the pie_chart
 bar_chart = pygal.Pie()
-bar_chart.title = "Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
+bar_chart.title = "2014-2021 Total Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
 for show in sorted_shows:
     bar_chart.add(show, sorted_shows[show])
 bar_chart.render_to_file('netflix_pie_chart.svg')
