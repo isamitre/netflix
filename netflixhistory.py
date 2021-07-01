@@ -51,7 +51,7 @@ with open("NetflixViewingHistory.csv", "r", encoding='utf-8') as file:
 # print(showDates)
 
 # # get shows that were less than binge worthy
-bingeWorthy = 10 #episodes
+bingeWorthy = 20 #episodes
 badShows = []
 for show in showDates:
     years = showDates[show]
@@ -62,21 +62,32 @@ for show in showDates:
 for show in badShows:
     del(showDates[show])
 
+# put the shows in the correc format for the graph
 shows = collections.defaultdict(list)
 for show in showDates:
-    print(show)
-    print(showDates[show])
     for i in range(14,22):
-        print(showDates[show].count(str(i)))
         shows[show].append(showDates[show].count(str(i)))
-    break
 # print(shows)
 
+# make the stacked bar chart
+bar_chart = pygal.StackedBar()
+bar_chart.title = "Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
+bar_chart.x_labels = map(str, range(2014, 2022))
+for show in shows:
+    bar_chart.add(show, shows[show])
+bar_chart.render_to_file('netflix_bar_chart.svg')
+
+# sort for the pie_chart
+sorted_shows = collections.defaultdict(list)
+for show in shows:
+    sorted_shows[show] = sum(shows[show])
+sorted_shows = dict(sorted(sorted_shows.items(), key=lambda item: item[1], reverse=True))
+print(sorted_shows)
 
 
-# bar_chart = pygal.StackedBar()
-# bar_chart.title = "Netflix Binge History (> 15 episodes per year)"
-# bar_chart.x_labels = map(str, range(2014, 2021))
-# for year in years:
-#     for show
-# bar_chart.render_to_file('bar_chart.svg')                          # Save the svg to a file
+# make the pie_chart
+bar_chart = pygal.Pie()
+bar_chart.title = "Netflix Binge History (> " + str(bingeWorthy) + " episodes)"
+for show in sorted_shows:
+    bar_chart.add(show, sorted_shows[show])
+bar_chart.render_to_file('netflix_pie_chart.svg')
